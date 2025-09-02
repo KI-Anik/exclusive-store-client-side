@@ -1,39 +1,29 @@
-import React, { useEffect, useState } from 'react';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import { FaRegHeart } from 'react-icons/fa';
-import { addToStoredList, getStoredList } from '../../utils/localStorage';
 import { FaCartShopping } from 'react-icons/fa6';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, addToWishlist } from '../dashboard/dashboardSlice';
 
 
-const CardDetails = () => {
+const ProductDetails = () => {
     const { id } = useParams()
     const pId = parseInt(id)
     const data = useLoaderData()
-    
-    const singleCard = data.find(card => card.id === pId)
-    const { id: currentBookId, product_image, product_title, price, description, specification, rating } = singleCard
 
-    const [isInCart, setIsInCart] = useState(false)
-    const [isWishlist, setIsWishList] = useState(false);
+    const singleProductCard = data.find(ProductCard => ProductCard.id === pId)
+    const { id: currentBookId, product_image, product_title, price, description, specification, rating } = singleProductCard
 
-    useEffect(() => {
-        const storedCart = getStoredList('cart');
-        setIsInCart(!!storedCart.find(item => item.id === pId))
+    const dispatch = useDispatch()
 
-        const storedWishList = getStoredList('wish-list');
-        setIsWishList(!!storedWishList.find(item => item.id === pId))
-    }, [pId]);
+    const isInCart = useSelector(state => !!state.dashboard.carts.find(item => item.id === pId));
+    const isWishlist = useSelector(state => !!state.dashboard.wishLists.find(item => item.id === pId));
 
     const handleAddToCart = () => {
-        if (addToStoredList(singleCard, 'cart')) {
-            setIsInCart(true);
-        }
+        dispatch(addToCart(singleProductCard))
     }
 
     const handleAddToWishList = () => {
-        if (addToStoredList(singleCard, 'wish-list')) {
-            setIsWishList(true);
-        }
+       dispatch(addToWishlist(singleProductCard))
     }
 
     return (
@@ -84,7 +74,7 @@ const CardDetails = () => {
                             {/* wishlist */}
                             {
                                 isWishlist ? (
-                                    <Link to={'/dashboard'}state={{tab: "wish-list"}} className="btn btn-primary">
+                                    <Link to={'/dashboard'} state={{ tab: "wish-list" }} className="btn btn-primary">
                                         View Wishlist <FaRegHeart />
                                     </Link>
                                 ) : (
@@ -96,9 +86,6 @@ const CardDetails = () => {
                                     </button>
                                 )
                             }
-
-
-
                         </div>
                     </div>
                 </div>
@@ -107,4 +94,4 @@ const CardDetails = () => {
     );
 };
 
-export default CardDetails;
+export default ProductDetails;

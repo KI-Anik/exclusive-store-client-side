@@ -2,18 +2,18 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import { getStoredList } from "../../utils/localStorage";
 
 const initialState = {
-    carts: getStoredList('carts').map((item) => ({ ...item, quantity: item.quantity || 1 })),
+    carts: getStoredList('cart').map((item) => ({ ...item, quantity: item.quantity || 1 })),
     wishLists: getStoredList('wish-list')
 }
 
-const dashboradSlice = createSlice({
+const dashboardSlice = createSlice({
     name: 'dashboard',
     initialState,
     reducers: {
-        addTOCart: (state, action) => {
+         addToCart: (state, action) => {
             const itemToAdd = action.payload
             const existingItem = state.carts.find(item => item.id === itemToAdd.id)
-            console.log(existingItem);
+            console.log('existingITem',existingItem);
             if (!existingItem) {
                 state.carts.push({ ...itemToAdd, quantity: 1 })
                 localStorage.setItem('cart', JSON.stringify(current(state.carts)))
@@ -27,28 +27,55 @@ const dashboradSlice = createSlice({
                 localStorage.setItem('cart', JSON.stringify(current(state.carts)))
             }
         },
-        removeItem: (state, action) => {
+        removeFromCart: (state, action) => {
             const idToRemove = action.payload
             state.carts = state.carts.filter(item => item.id !== idToRemove)
-            localStorage.setItem('cart', JSON.stringify(current(state.carts)))
+            localStorage.setItem('cart', JSON.stringify((state.carts)))
+        },
+
+         // wishList section
+        addToWishlist: (state, action) => {
+            const itemToAdd = action.payload
+            const existingItem = state.wishLists.find(item => item.id === itemToAdd.id)
+            if (!existingItem) {
+                state.wishLists.push(itemToAdd)
+                localStorage.setItem('wish-list', JSON.stringify(current(state.wishLists)))
+            }
         },
         moveToCartFromWishList: (state, action) => {
             const itemToMove = action.payload
+            console.log(itemToMove);
             // remove from wish list
             state.wishLists = state.wishLists.filter(item => item.id !== itemToMove.id)
-            localStorage('wish-list', JSON.stringify(current(state.wishLists)))
+            localStorage.setItem('wish-list', JSON.stringify((state.wishLists)))
             // add to cart if not already there
             const existingItem = state.carts.find(item => item.id === itemToMove.id)
             if (!existingItem) {
                 state.carts.push({ ...itemToMove, quantity: 1 })
                 localStorage.setItem('cart', JSON.stringify(current(state.carts)))
             }
+        },
+        removeFromWishlist: (state, action) => {
+            console.log(action.payload, 'slice');
+            const idToRemove = action.payload
+            state.wishLists = state.wishLists.filter(item => item.id !== idToRemove)
+            localStorage.setItem('wish-list', JSON.stringify((state.wishLists)))
+        },
 
+        // extra
+        clearCart: (state) => {
+            state.carts = [];
+            localStorage.setItem('cart', JSON.stringify([]));
+        },
+        sortByPrice: (state) => {
+            state.carts.sort((a, b) => a.price - b.price),
+                state.wishLists.sort((a, b) => a.price - b.price)
         }
+
+
     }
 })
 
-export const { addTOCart, updateQuantity, removeItem, moveToCartFromWishList } = dashboradSlice.actions
+export const {addToCart, updateQuantity, removeFromCart,addToWishlist, moveToCartFromWishList, removeFromWishlist, clearCart, sortByPrice } = dashboardSlice.actions
 
-export default dashboradSlice.reducer
-
+export default dashboardSlice.reducer

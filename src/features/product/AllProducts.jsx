@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Card from './Card';
+import ProductCard from './ProductCard';
 
 const AllProducts = ({categories}) => {
 
@@ -49,11 +49,11 @@ const AllProducts = ({categories}) => {
                    gadget.length === 0 ?
                     <p className='text-5xl p-5 text-red-500 font-bold'> Sorry! No Item </p> :
                       gadget.map(card => 
-                      <Card key={card.id} 
+                      <ProductCard key={card.id} 
                       card={card}
                       >
 
-                      </Card>)
+                      </ProductCard>)
                 }
 
             </div>

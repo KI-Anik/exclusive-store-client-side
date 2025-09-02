@@ -1,6 +1,6 @@
 import React from 'react';
 import Banner from './Banner';
-import AllProducts from '../AllProducts/AllProducts';
+import AllProducts from '../../features/product/AllProducts';
 import { useLoaderData } from 'react-router-dom';
 
 const Home = () => {

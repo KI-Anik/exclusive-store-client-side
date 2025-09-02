@@ -12,10 +12,10 @@ import Statistic from './components/Statistic/Statistic';
 import Error from './components/Error/Error';
 import { Toaster } from 'react-hot-toast';
 import About from './components/About/About';
-import CardDetails from './components/AllProducts/CardDetails';
 import DashBoard from './features/dashboard/Dashboard';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
+import ProductDetails from './features/product/ProductDetails';
 
 
 const router = createBrowserRouter([
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         path: '/details/:id',
         loader: () => fetch(`/fakeData.json`),
         // element: <ProductDetails></ProductDetails>,
-        element: <CardDetails/>
+        element: <ProductDetails/>
       },
       {
         path: '/statistic',
@@ -58,8 +58,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <Provider store={store}>
     <RouterProvider router={router} />
-    <Provider store={store}/>
+    </Provider>
     <Toaster/>
   </StrictMode>,
 )

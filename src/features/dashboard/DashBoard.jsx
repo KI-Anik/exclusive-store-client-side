@@ -1,61 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { addToStoredList, getStoredList, removeList } from '../../utils/localStorage';
 import CardList from '../../features/dashboard/CardList';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../dashboard/dashboardSlice';
 
 const DashBoard = () => {
     const navigate = useNavigate()
-    const location=useLocation()
+    const location = useLocation()
+    const dispatch = useDispatch()
 
-    const [carts, setCarts] = useState([]);
-    const [wishLists, setwishLists] = useState([])
-    const [tabIndex, setTabIndex]= useState(location.state?.tab === 'wish-list' ? 1 : 0)
-    const [totalPrice, setTotalPrice] = useState(0); // update price
+    const { carts, wishLists } = useSelector(state => state.dashboard)
+
+    // onclick of 'view wishlist', make wishlist tab open by-default
+    const [tabIndex, setTabIndex] = useState(location.state?.tab === 'wish-list' ? 1 : 0)
     const [Modal, setModal] = useState(false)
 
-    useEffect(() => {
-        const storedCarts = getStoredList('cart')
-        setCarts(storedCarts)
-        setTotalPrice(calculateTotalPrice(storedCarts))
-        setwishLists(getStoredList('wish-list'))
-    }, [])
+    const totalPrice = carts.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
 
-    const calculateTotalPrice = (list) => {
-        return list.reduce((sum, item)=> sum + item.price, 0)
-    };
-
+    // remove item 
     const handleRemove = (id, type) => {
-        removeList(id, type);
-
         if (type === 'cart') {
-            const updatedCarts = getStoredList('cart')
-            setCarts(updatedCarts)
-            setTotalPrice(calculateTotalPrice(updatedCarts))
+            dispatch(removeFromCart(id))
         } else {
-            setwishLists(getStoredList('wish-list'))
+            dispatch(removeFromWishlist(id))
         }
     };
 
     const moveToCart = item => {
-        handleRemove(item.id, 'wish-list')
-        addToStoredList(item, 'cart')
-        const updatedCarts = getStoredList('cart')
-        setCarts(updatedCarts)
-        setTotalPrice(calculateTotalPrice(updatedCarts))
+        dispatch(moveToCartFromWishList(item))
     }
 
     const handleSortByPrice = () => {
-        const sortedCarts = [...carts].sort((a,b) => a.price - b.price);
-        setCarts(sortedCarts);
+        dispatch(sortByPrice())
     };
 
     const handlePurchase = () => {
+        dispatch(clearCart())
         setModal(true);
-        setCarts([]);
-        setTotalPrice(0);
-        localStorage.setItem('cart', JSON.stringify([])); // empty all
     };
 
     return (
@@ -71,7 +54,7 @@ const DashBoard = () => {
                 <button onClick={handleSortByPrice} className='btn hover:bg-lime-400'>Sort By price</button>
                 <button onClick={handlePurchase} className='btn hover:bg-green-500'>Purchase</button>
             </div>
-            <Tabs selectedIndex={tabIndex} onSelect={(index)=> setTabIndex(index)}>
+            <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
                 <TabList >
                     <Tab>Cart</Tab>
                     <Tab>Wishlists</Tab>
@@ -109,24 +92,24 @@ const DashBoard = () => {
                 </TabPanel>
             </Tabs>
 
-                    
+
             {Modal && (
-        <div className="modal modal-open text-center">
-          <div className="modal-box flex flex-col justify-center items-center space-y-3">
-            <img src="/assets/Group.png" alt="" />
-            <h3 className="font-bold text-lg">Successfully Paid!</h3>
-            <p className="py-4">Your payment was successful, and your cart is now empty.</p>
-            <div className="modal-action">
-              <button className="btn btn-primary" onClick={() => {
-                setModal(false)
-                navigate('/')
-                }}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                <div className="modal modal-open text-center">
+                    <div className="modal-box flex flex-col justify-center items-center space-y-3">
+                        <img src="/assets/Group.png" alt="" />
+                        <h3 className="font-bold text-lg">Successfully Paid!</h3>
+                        <p className="py-4">Your payment was successful, and your cart is now empty.</p>
+                        <div className="modal-action">
+                            <button className="btn btn-primary" onClick={() => {
+                                setModal(false)
+                                navigate('/')
+                            }}>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );

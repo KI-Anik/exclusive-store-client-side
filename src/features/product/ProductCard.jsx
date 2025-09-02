@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Card = ({ card }) => {
+const ProductCard = ({ card }) => {
     const {id, product_title, product_image, price } = card
 
     return (
@@ -17,7 +17,7 @@ const Card = ({ card }) => {
                 <p>Price: ${price}</p>
                 <div className="card-actions">
 
-                    {/* UseParams in 'cardDetails.jsx' */}
+                    {/* UseParams in 'ProductDetails.jsx' */}
                     <Link to={`/details/${id}`}>
                     <button  className="btn btn-primary">View Details</button>
                     </Link>
@@ -28,4 +28,4 @@ const Card = ({ card }) => {
     );
 };
 
-export default Card;
+export default ProductCard;
