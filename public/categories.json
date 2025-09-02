@@ -1,0 +1,26 @@
+[
+    {
+      "id": 0,
+      "category": "All Product"
+    },
+    {
+      "id": 1,
+      "category": "Samsung"
+    },
+    {
+      "id": 2,
+      "category": "Iphone"
+    },
+    {
+      "id": 3,
+      "category": "Oppo"
+    },
+    {
+        "id": 4,
+        "category": "I-pad"  
+    },
+    {
+         "id": 5,
+      "category": "Smart Watch"
+    }
+  ]

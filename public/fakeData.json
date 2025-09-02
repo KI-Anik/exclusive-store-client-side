@@ -1,0 +1,173 @@
+[
+    {
+      "id": 1,
+      "product_title": "Galaxy Tab S8+",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-tab-s8-plus.jpg",
+      "category": "Samsung",
+      "price": 599,
+      "description": "The TechPro X1 features a sleek design with powerful performance, great for gaming and multitasking.",
+      "specification": [
+        "6.5-inch OLED display",
+        "12GB RAM",
+        "256GB internal storage",
+        "5000mAh battery",
+        "Qualcomm Snapdragon 888"
+      ],
+      "availability": true,
+      "rating": 4.5
+    },
+    {
+      "id": 2,
+      "product_title": "Galaxy S22 5G",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s22-5g.jpg",
+      "category": "Samsung",
+      "price": 799,
+      "description": "PixelMax Z offers an amazing camera experience with a stunning display and smooth performance.",
+      "specification": [
+        "6.4-inch AMOLED display",
+        "8GB RAM",
+        "128GB internal storage",
+        "4000mAh battery",
+        "Exynos 2100 processor"
+      ],
+      "availability": true,
+      "rating": 4.8
+    },
+    {
+      "id": 3,
+      "product_title": "Galaxy S22 Ultra 5G",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s22-ultra-5g.jpg",
+      "category": "Samsung",
+      "price": 1199,
+      "description": "Premium performance with a 108MP camera and a stunning 120Hz display.",
+      "specification": [
+        "6.9-inch Dynamic AMOLED display",
+        "16GB RAM",
+        "512GB internal storage",
+        "5000mAh battery",
+        "Qualcomm Snapdragon 865"
+      ],
+      "availability": true,
+      "rating": 4.7
+    },
+    {
+      "id": 4,
+      "product_title": "iPhone 13",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13.jpg",
+      "category": "Iphone",
+      "price": 499,
+      "description": "OnePlus Nord 2 offers flagship performance with an affordable price tag.",
+      "specification": [
+        "6.43-inch Fluid AMOLED display",
+        "12GB RAM",
+        "256GB internal storage",
+        "4500mAh battery",
+        "MediaTek Dimensity 1200"
+      ],
+      "availability": true,
+      "rating": 4.4
+    },
+    {
+      "id": 5,
+      "product_title": "iPhone 12 Pro Max",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-12-pro-max-.jpg",
+      "category": "Iphone",
+      "price": 1099,
+      "description": "iPhone 14 Pro comes with Apple's most advanced camera system and a Super Retina XDR display.",
+      "specification": [
+        "6.1-inch Super Retina XDR display",
+        "6GB RAM",
+        "128GB internal storage",
+        "3200mAh battery",
+        "Apple A16 Bionic chip"
+      ],
+      "availability": true,
+      "rating": 4.9
+    },
+    {
+      "id": 6,
+      "product_title": "iPhone 13 Pro",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-13-pro.jpg",
+      "category": "Iphone",
+      "price": 899,
+      "description": "Xiaomi Mi 11 Ultra offers incredible camera capabilities and premium build quality.",
+      "specification": [
+        "6.81-inch AMOLED display",
+        "12GB RAM",
+        "256GB internal storage",
+        "5000mAh battery",
+        "Qualcomm Snapdragon 888"
+      ],
+      "availability": true,
+      "rating": 4.6
+    },
+    {
+      "id": 7,
+      "product_title": "Reno6 Lite",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/oppo-reno6-lite.jpg",
+      "category": "Oppo",
+      "price": 699,
+      "description": "The Moto Edge 30 Pro offers high-end performance with a 144Hz display and great cameras.",
+      "specification": [
+        "6.7-inch OLED display",
+        "8GB RAM",
+        "128GB internal storage",
+        "4500mAh battery",
+        "Qualcomm Snapdragon 8 Gen 1"
+      ],
+      "availability": true,
+      "rating": 4.3
+    },
+    {
+      "id": 8,
+      "product_title": "Oppo Find X5",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/oppo-find-x5.jpg",
+      "category": "Oppo",
+      "price": 999,
+      "description": "Oppo Find X5 Pro brings stunning design with superb performance and camera quality.",
+      "specification": [
+        "6.7-inch AMOLED display",
+        "12GB RAM",
+        "256GB internal storage",
+        "5000mAh battery",
+        "MediaTek Dimensity 9000"
+      ],
+      "availability": true,
+      "rating": 4.7
+    },
+    {
+      "id": 9,
+      "product_title": "iPad mini (2021)",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/apple-ipad-mini-2021.jpg",
+      "category": "I-pad",
+      "price": 749,
+      "description": "Realme GT 2 Pro combines flagship performance with a 50MP camera and 120Hz AMOLED display.",
+      "specification": [
+        "6.7-inch AMOLED display",
+        "12GB RAM",
+        "256GB internal storage",
+        "5000mAh battery",
+        "Qualcomm Snapdragon 8 Gen 1"
+      ],
+      "availability": true,
+      "rating": 4.6
+    },
+    {
+      "id": 10,
+      "product_title": "iPad Pro 11 (2021)",
+      "product_image": "https://fdn2.gsmarena.com/vv/bigpic/apple-ipad-pro-11-2021.jpg",
+      "category": "I-pad",
+      "price": 1299,
+      "description": "The ultimate gaming phone, the Asus ROG Phone 6 delivers extreme performance with a 165Hz display.",
+      "specification": [
+        "6.78-inch AMOLED display",
+        "16GB RAM",
+        "512GB internal storage",
+        "6000mAh battery",
+        "Qualcomm Snapdragon 8 Gen 1"
+      ],
+      "availability": true,
+      "rating": 4.8
+    }
+  ]
+  
