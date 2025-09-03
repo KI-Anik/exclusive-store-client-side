@@ -9,7 +9,7 @@ const Banner = () => {
 
                 <h1 className='text-5xl font-bold'>Upgrade Your Tech Accessorize with <br /> Exclusive-store Accessories</h1>
                 <p className='font-xl'>Explore the latest gadgets that will take your experience to the next level. From smart devices <br /> to the coolest accessories, we have it all!</p>
-                <Link to={'/dashboard'} className='btn bg-white text-purple-600 rounded-full px-6 font-bold'>Shop Now</Link>
+                <Link to={'/allproducts'} className='btn bg-white text-purple-600 rounded-full px-6 font-bold'>Shop Now</Link>
             </div>
 
             {/* Image section */}
