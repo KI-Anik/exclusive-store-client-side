@@ -13,9 +13,9 @@ const Navbar = () => {
                 <h1>Exclusive-store</h1>
                 <div className='flex gap-10 font-bold'>
                     <NavLink to={'/'}>Home</NavLink>
-                    <NavLink to={'/statistic'}>Statistic</NavLink>
+                    <NavLink to={'/allproducts'}>All-Products</NavLink>
                     <NavLink to={'/dashboard'}>Dashboard</NavLink>
-                    <NavLink to={'/about'}>About Us</NavLink>
+                    <NavLink to={'/order'}>My order</NavLink>
                     <a href="https://www.facebook.com/iamkhairul101">Contact</a>
                 </div>
                 

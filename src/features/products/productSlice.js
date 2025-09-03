@@ -1,19 +1,21 @@
 import { createSlice, current } from "@reduxjs/toolkit";
-import { getStoredList } from "../../utils/localStorage";
+import { getStoredList } from '../../utils/localStorage';
+
+
 
 const initialState = {
     carts: getStoredList('cart').map((item) => ({ ...item, quantity: item.quantity || 1 })),
     wishLists: getStoredList('wish-list')
 }
 
-const dashboardSlice = createSlice({
-    name: 'dashboard',
+const productSlice = createSlice({
+    name: 'product',
     initialState,
     reducers: {
-         addToCart: (state, action) => {
+        addToCart: (state, action) => {
             const itemToAdd = action.payload
             const existingItem = state.carts.find(item => item.id === itemToAdd.id)
-            console.log('existingITem',existingItem);
+            console.log('existingITem', existingItem);
             if (!existingItem) {
                 state.carts.push({ ...itemToAdd, quantity: 1 })
                 localStorage.setItem('cart', JSON.stringify(current(state.carts)))
@@ -33,7 +35,7 @@ const dashboardSlice = createSlice({
             localStorage.setItem('cart', JSON.stringify((state.carts)))
         },
 
-         // wishList section
+        // wishList section
         addToWishlist: (state, action) => {
             const itemToAdd = action.payload
             const existingItem = state.wishLists.find(item => item.id === itemToAdd.id)
@@ -76,6 +78,6 @@ const dashboardSlice = createSlice({
     }
 })
 
-export const {addToCart, updateQuantity, removeFromCart,addToWishlist, moveToCartFromWishList, removeFromWishlist, clearCart, sortByPrice } = dashboardSlice.actions
+export const { addToCart, updateQuantity, removeFromCart, addToWishlist, moveToCartFromWishList, removeFromWishlist, clearCart, sortByPrice } = productSlice.actions
 
-export default dashboardSlice.reducer
+export default productSlice.reducer

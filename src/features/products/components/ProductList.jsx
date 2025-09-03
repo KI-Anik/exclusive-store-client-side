@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
 
-const AllProducts = ({categories}) => {
+const ProductList = ({categories}) => {
 
     const [gadget, setGadget] = useState([]) // handle 10 data for display
     const [category, setCategory] = useState("All Product") // only for display side categories name
@@ -61,4 +61,4 @@ const AllProducts = ({categories}) => {
     );
 };
 
-export default AllProducts;
+export default ProductList;

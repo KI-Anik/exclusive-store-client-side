@@ -1,10 +1,10 @@
-import { FaTrashAlt } from 'react-icons/fa';
+import { FaRegHeart, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { updateQuantity } from './dashboardSlice';
+import { updateQuantity } from '../products/productSlice';
 
 const CardList = ({ item, handleRemove, moveToCart }) => {
 
-    const { id, product_image, product_title, price, description, quantity = 1 } = item
+    const { id, product_image, product_title, price, description, quantity = 1, availability } = item
     const dispatch = useDispatch()
 
     const handleIncrement = () => {
@@ -30,20 +30,29 @@ const CardList = ({ item, handleRemove, moveToCart }) => {
                     <p>
                         {description}
                     </p>
+                    {
+                        availability ? 
                     <p>Price: ${price} X {quantity} = ${totalPrice}</p>
+                    :
+                    <p>Price : ${price}</p>
+
+                    }
                 </div>
                 {/* delete button */}
                 <button onClick={handleRemove} className='mx-auto'><FaTrashAlt></FaTrashAlt></button>
                 {/* updateQuantity button available only for 'cart' tab */}
-                {
-                    moveToCart ? (
+                {availability ?
+                    (moveToCart ? (
                         <button onClick={moveToCart} className='btn bg-purple-500 mx-auto mt-3'>Add To Cart</button>
                     ) :
                         <div className='flex gap-4 items-center'>
                             <button onClick={handleDecrement} className='btn'>-</button>
                             <p>{quantity}</p>
                             <button onClick={handleIncrement} className='btn'>+</button>
-                        </div>
+                        </div>) :
+                    (<div className='text-center'>
+                        <p className='text-red-500 text-xl'>stock out</p>
+                    </div>)
                 }
 
 

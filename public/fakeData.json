@@ -13,7 +13,7 @@
         "5000mAh battery",
         "Qualcomm Snapdragon 888"
       ],
-      "availability": true,
+      "availability": false,
       "rating": 4.5
     },
     {
@@ -115,7 +115,7 @@
         "4500mAh battery",
         "Qualcomm Snapdragon 8 Gen 1"
       ],
-      "availability": true,
+      "availability": false,
       "rating": 4.3
     },
     {

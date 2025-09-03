@@ -7,15 +7,15 @@ import {
 } from "react-router-dom";
 import './index.css'
 import Root from './components/Root/Root';
-import Home from './components/Home/Home';
-import Statistic from './components/Statistic/Statistic';
-import Error from './components/Error/Error';
+import Error from './components/ui/Error';
 import { Toaster } from 'react-hot-toast';
-import About from './components/About/About';
 import DashBoard from './features/dashboard/Dashboard';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
-import ProductDetails from './features/product/ProductDetails';
+import { ProductDetails } from './features/products';
+import HomePage from './components/Home/HomePage';
+import AllProductsPage from './features/products/AllProductsPage';
+import OrderPage from './features/orders/OrderPage';
 
 
 const router = createBrowserRouter([
@@ -29,17 +29,16 @@ const router = createBrowserRouter([
       {
         path: '/',
         loader: ()=> fetch('/categories.json'),
-        element: <Home></Home>,
+        element: <HomePage></HomePage>,
       },
       {
         path: '/details/:id',
         loader: () => fetch(`/fakeData.json`),
-        // element: <ProductDetails></ProductDetails>,
         element: <ProductDetails/>
       },
       {
-        path: '/statistic',
-        element: <Statistic></Statistic>,
+        path: '/allproducts',
+        element: <AllProductsPage/>,
 
       },
       {
@@ -48,8 +47,8 @@ const router = createBrowserRouter([
         element: <DashBoard></DashBoard>,
       },
       {
-        path: '/about',
-        element: <About></About>
+        path: '/order',
+        element: <OrderPage/>
       }
     ]
   },

@@ -1,17 +1,17 @@
 import React from 'react';
 import Banner from './Banner';
-import AllProducts from '../../features/product/AllProducts';
 import { useLoaderData } from 'react-router-dom';
+import { ProductList } from '../../features/products';
 
-const Home = () => {
+const HomePage = () => {
     // fethched main 10 data
     const categories = useLoaderData()
     return (
         <div className='w-11/12 mx-auto'>
             <Banner></Banner>
-            <AllProducts categories={categories}></AllProducts>
+            <ProductList categories={categories}></ProductList>
         </div>
     );
 };
 
-export default Home;
+export default HomePage;
