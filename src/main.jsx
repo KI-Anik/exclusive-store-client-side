@@ -9,13 +9,13 @@ import './index.css'
 import Root from './components/Root/Root';
 import Error from './components/ui/Error';
 import { Toaster } from 'react-hot-toast';
-import DashBoard from './features/dashboard/Dashboard';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import { ProductDetails } from './features/products';
 import HomePage from './components/Home/HomePage';
 import AllProductsPage from './features/products/AllProductsPage';
 import OrderPage from './features/orders/OrderPage';
+import DashBoardPage from './features/dashboard/DashBoardPage';
 
 
 const router = createBrowserRouter([
@@ -38,13 +38,14 @@ const router = createBrowserRouter([
       },
       {
         path: '/allproducts',
+        loader: ()=> fetch('/categories.json'),
         element: <AllProductsPage/>,
 
       },
       {
         path: '/dashboard',
         loader: () => fetch('/fakeData.json'),
-        element: <DashBoard></DashBoard>,
+        element: <DashBoardPage></DashBoardPage>,
       },
       {
         path: '/order',

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import CardList from '../../features/dashboard/CardList';
+import CardList from './CardList';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../products/productSlice';
 
-const DashBoard = () => {
+const DashBoardPage = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
@@ -127,4 +127,4 @@ const DashBoard = () => {
     );
 };
 
-export default DashBoard;
+export default DashBoardPage;
