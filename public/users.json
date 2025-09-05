@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "User",
+    "joined_date": "2023-01-15"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "role": "User",
+    "joined_date": "2023-02-20"
+  },
+  {
+    "id": 3,
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "role": "Admin",
+    "joined_date": "2023-01-01"
+  },
+  {
+    "id": 4,
+    "name": "Peter Jones",
+    "email": "peter.jones@example.com",
+    "role": "User",
+    "joined_date": "2023-03-10"
+  }
+]

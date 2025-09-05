@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import CardList from './CardList';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../products/productSlice';
+import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../../features/products/productSlice';
+import { logOut } from '../../features/auth/authSlice';
+import { useLogoutMutation } from '../../features/auth/api/authApi';
+import toast from 'react-hot-toast';
 
 const DashBoardPage = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const { carts, wishLists } = useSelector(state => state.product)
     console.log('cart', carts);
@@ -42,6 +45,7 @@ const DashBoardPage = () => {
         setModal(true);
     };
 
+   
     return (
         <div>
             <div className='text-center space-y-6 bg-purple-500 pb-12 pt-10'>
@@ -63,6 +67,7 @@ const DashBoardPage = () => {
                     (carts?.length > 1 || wishLists?.length > 1) &&
                     <button onClick={handleSortByPrice} className='btn hover:bg-lime-400 border-emerald-400'>Sort By price</button>
                 }
+                
             </div>
 
             {/* wishlist tab will open by-default, after click on 'view wishlist' */}

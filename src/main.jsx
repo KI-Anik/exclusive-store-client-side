@@ -11,11 +11,18 @@ import Error from './components/ui/Error';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
-import { ProductDetails } from './features/products';
+import { AllProductsPage, ProductDetailsPage } from './features/products';
 import HomePage from './components/Home/HomePage';
-import AllProductsPage from './features/products/AllProductsPage';
 import OrderPage from './features/orders/OrderPage';
-import DashBoardPage from './features/dashboard/DashBoardPage';
+import DashBoardPage from './components/dashboard/DashBoardPage';
+import AdminLayout from './components/admin/AdminLayout';
+import AdminDashboardHome from './components/admin/pages/AdminDashboardHome';
+import ManageProducts from './components/admin/pages/ManageProducts';
+import ManageUsers from './components/admin/pages/ManageUsers';
+import ManageOrders from './components/admin/pages/ManageOrders';
+import LoginPage from './components/auth/LoginPage';
+import PrivateRoute from './components/auth/PrivateRoute';
+import RegistrationPage from './components/auth/RegistrationPage';
 
 
 const router = createBrowserRouter([
@@ -32,23 +39,55 @@ const router = createBrowserRouter([
       },
       {
         path: '/details/:id',
-        loader: () => fetch(`/fakeData.json`),
-        element: <ProductDetails/>
+        element: <ProductDetailsPage />
       },
       {
         path: '/allproducts',
-        loader: ()=> fetch('/categories.json'),
-        element: <AllProductsPage/>,
+        element: <AllProductsPage />,
 
       },
       {
         path: '/dashboard',
-        loader: () => fetch('/fakeData.json'),
         element: <DashBoardPage></DashBoardPage>,
       },
       {
         path: '/order',
-        element: <OrderPage/>
+        element: <OrderPage />
+      },
+      {
+        path: '/login',
+        element: <LoginPage />
+      },
+      {
+        path: '/register',
+        element: <RegistrationPage />
+      },
+      {
+        path: '/admin',
+        element: (
+          <PrivateRoute>
+            <AdminLayout />
+          </PrivateRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <AdminDashboardHome />
+          },
+          {
+            path: 'manage-products',
+            element: <ManageProducts />
+          },
+          {
+            path: 'manage-users',
+            element: <ManageUsers />,
+          },
+          {
+            path: 'manage-orders',
+            element: <ManageOrders />,
+            loader: () => fetch('/orders.json')
+          }
+        ]
       }
     ]
   },
@@ -58,8 +97,8 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </Provider>
-    <Toaster/>
+    <Toaster />
   </StrictMode>,
 )

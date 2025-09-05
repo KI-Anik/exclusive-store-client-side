@@ -4,6 +4,7 @@ import { useGetCategoriesQuery } from '../api/productApi';
 const FilterByCategories = ({handleCategory}) => {
 
     const {data : categories = []} = useGetCategoriesQuery()
+    console.log(categories);
     return (
         <div className='card bg-base-100 items-center shadow-xl py-8 gap-5 flex flex-col'>
                         {/* map for display side category name as btn, addEvent for filter */}

@@ -1,19 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ProductCard from './ProductCard';
 import FilterByCategories from './FilterByCategories';
-import { useGetCategoriesQuery, useGetProductsQuery } from '../api/productApi';
+import { useGetProductsQuery } from '../api/productApi';
 
 const ProductList = ({ }) => {
 
-    const { data: categories = [] } = useGetCategoriesQuery()
-    const { data: allProducts = [] } = useGetProductsQuery()
-    console.log(categories);
+    // The hook now returns an object, so we destructure it.
+    const { data } = useGetProductsQuery({ limit: 100 }); // Fetch all products
+    const allProducts = data?.products || [];
 
     const [category, setCategory] = useState("All Product") // only for display side categories name
 
     const gadget = useMemo(() => {
         if (category === 'All Product') {
-            return allProducts
+            return allProducts;
         }
         return allProducts.filter(item => item.category === category)
     }, [allProducts, category])

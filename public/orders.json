@@ -1,0 +1,33 @@
+[
+  {
+    "id": "ORD-001",
+    "customer_name": "John Doe",
+    "date": "2023-05-01",
+    "total": 1398,
+    "status": "Shipped",
+    "items": [
+      { "product_id": 2, "quantity": 1 },
+      { "product_id": 4, "quantity": 1 }
+    ]
+  },
+  {
+    "id": "ORD-002",
+    "customer_name": "Jane Smith",
+    "date": "2023-05-03",
+    "total": 1199,
+    "status": "Processing",
+    "items": [
+      { "product_id": 3, "quantity": 1 }
+    ]
+  },
+  {
+    "id": "ORD-003",
+    "customer_name": "Peter Jones",
+    "date": "2023-05-04",
+    "total": 1099,
+    "status": "Delivered",
+    "items": [
+      { "product_id": 5, "quantity": 1 }
+    ]
+  }
+]

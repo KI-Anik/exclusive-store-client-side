@@ -1,23 +1,40 @@
-import { Link, useLoaderData, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FaRegHeart } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, addToWishlist } from './productSlice';
+import { addToCart, addToWishlist } from '../productSlice';
+import { useGetProductQuery } from '../api/productApi';
 
 
 const ProductDetailsPage
     = () => {
         const { id } = useParams()
         const pId = parseInt(id)
-        const data = useLoaderData()
-
-        const singleProductCard = data.find(ProductCard => ProductCard.id === pId)
-        const { id: currentBookId, product_image, product_title, price, description, specification, rating, availability } = singleProductCard
+        const { data: singleProductCard, isLoading, isError } = useGetProductQuery(pId);
 
         const dispatch = useDispatch()
 
         const isInCart = useSelector(state => !!state.product.carts.find(item => item.id === pId));
         const isWishlist = useSelector(state => !!state.product.wishLists.find(item => item.id === pId));
+
+        if (isLoading) {
+            return (
+                <div className="text-center py-40">
+                    <span className="loading loading-spinner loading-lg"></span>
+                </div>
+            );
+        }
+    
+        if (isError || !singleProductCard) {
+            return (
+                <div className="text-center py-40 text-red-500">
+                    <h2 className='text-3xl font-bold'>Error: Product not found.</h2>
+                    <p>The product you are looking for does not exist.</p>
+                </div>
+            );
+        }
+
+        const { product_image, product_title, price, description, specification, rating, availability } = singleProductCard
 
         const handleAddToCart = () => {
             dispatch(addToCart(singleProductCard))

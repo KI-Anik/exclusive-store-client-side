@@ -1,6 +1,6 @@
 import { FaRegHeart, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { updateQuantity } from '../products/productSlice';
+import { updateQuantity } from '../../features/products/productSlice';
 
 const CardList = ({ item, handleRemove, moveToCart }) => {
 

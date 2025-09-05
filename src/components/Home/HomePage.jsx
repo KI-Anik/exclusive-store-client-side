@@ -1,6 +1,5 @@
 import React from 'react';
 import Banner from './Banner';
-import { useLoaderData } from 'react-router-dom';
 import { ProductList } from '../../features/products';
 import AvailableProduct from './AvailableProduct';
 

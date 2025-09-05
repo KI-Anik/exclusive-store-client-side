@@ -1,17 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { useGetCategoriesQuery, useGetProductsQuery } from '../../features/products';
+import { useGetProductsQuery } from '../../features/products';
 import FilterByCategories from '../../features/products/components/FilterByCategories';
 import ProductCard from '../../features/products/components/ProductCard';
 
 const AvailableProduct = () => {
-    const { data: categories = [] } = useGetCategoriesQuery()
-    const { data: allProducts = [] } = useGetProductsQuery()
+    // The hook now returns an object, so we destructure it.
+    // We'll fetch all products by setting a high limit. A better long-term solution
+    // would be a dedicated endpoint or parameter for fetching all items.
+    const { data } = useGetProductsQuery({ limit: 100 });
+    const allProducts = data?.products || [];
 
     const [category, setCategory] = useState("All Product") // only for display side categories name
 
     const gadget = useMemo(() => {
         if (category === 'All Product') {
-            return allProducts
+            return allProducts;
         }
         return allProducts.filter(item => item.category === category)
     }, [allProducts, category])
