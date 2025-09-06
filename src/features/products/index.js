@@ -11,6 +11,8 @@ export { default as ProductDetailsPage } from './pages/ProductDetailsPage';
 // Components
 export { default as ProductList } from './components/ProductList';
 export { default as ProductCard } from './components/ProductCard';
+export { default as ProductDetailsSkeleton } from './components/ProductDetailsSkeleton';
+export { default as RelatedProducts } from './components/RelatedProducts';
 
 // Exporting API hooks from your API slice
 export { useGetProductsQuery, useGetProductQuery, useGetCategoriesQuery } from './api/productApi';

@@ -1,25 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import CardList from './CardList';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {  useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../../features/products/productSlice';
-import { logOut } from '../../features/auth/authSlice';
-import { useLogoutMutation } from '../../features/auth/api/authApi';
+import { useCreateOrderMutation } from '../../features/orders/api/orderApi'; // Corrected path if needed, but hook name is from the right file now
+import { openPurchaseModal, closePurchaseModal } from '../../features/orders/orderSlice';
 import toast from 'react-hot-toast';
+import { FaTimes } from 'react-icons/fa';
 
 const DashBoardPage = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch();
 
-    const { carts, wishLists } = useSelector(state => state.product)
-    console.log('cart', carts);
+    const { carts, wishLists } = useSelector(state => state.product);
+    const { token, user } = useSelector(state => state.auth);
+    const { isPurchaseModalOpen } = useSelector(state => state.order);
+
+    const [createOrder, { isLoading: isCreatingOrder }] = useCreateOrderMutation();
 
     // state for handle tab open by default 
     const [tabIndex, setTabIndex] = useState(location.state?.tab === 'wish-list' ? 1 : 0)
-    const [Modal, setModal] = useState(false)
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
+    const [shippingAddress, setShippingAddress] = useState(user?.address || ''); // Pre-fill if user has an address
+
+    // Open the purchase modal automatically if the user was redirected from the login page
+    useEffect(() => {
+        if (location.state?.from?.pathname === '/dashboard' && token && carts.length > 0) {
+            dispatch(openPurchaseModal());
+        }
+    }, [location.state, token, carts.length, dispatch]);
 
     const totalPrice = carts.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
 
@@ -41,11 +53,40 @@ const DashBoardPage = () => {
     };
 
     const handlePurchase = () => {
-        dispatch(clearCart())
-        setModal(true);
+        if (token) {
+            // User is logged in, open the confirmation modal
+            dispatch(openPurchaseModal());
+        } else {
+            // User is not logged in, redirect to login page, preserving the current location
+            navigate('/login', { state: { from: location } });
+        }
     };
 
-   
+    const handleConfirmPurchase = async () => {
+        const orderData = {
+            // The server gets the userId from the authenticated request
+            items: carts.map(item => ({ productId: item.id, quantity: item.quantity })),
+            // The server calculates the total amount to prevent price manipulation
+            shippingAddress: shippingAddress, // Use the state for shipping address
+        };
+
+        try {
+            await createOrder(orderData).unwrap();
+            dispatch(closePurchaseModal());
+            dispatch(clearCart());
+            setShowSuccessModal(true);
+            toast.success('Order placed successfully!');
+        } catch (error) {
+            // The server-side fix now provides clearer error messages
+            const errorMessage = error?.data?.message || 'Failed to place order. Please try again.';
+            toast.error(errorMessage);
+            dispatch(closePurchaseModal());
+        }
+    };
+
+    const shippingCharge = 100;
+    const totalCharge = totalPrice + shippingCharge;
+
     return (
         <div>
             <div className='text-center space-y-6 bg-purple-500 pb-12 pt-10'>
@@ -110,16 +151,54 @@ const DashBoardPage = () => {
             </Tabs>
 
             {/* modal start */}
-            {Modal && (
+            {isPurchaseModalOpen && (
+                <div className="modal modal-open">
+                    <div className="modal-box relative">
+                        <button
+                            className="btn btn-sm btn-circle absolute right-2 top-2"
+                            onClick={() => dispatch(closePurchaseModal())}
+                        >
+                            <FaTimes />
+                        </button>
+                        <h3 className="font-bold text-lg text-center mb-4">Confirm Your Purchase</h3>
+                        <div className="form-control w-full">
+                            <label className="label">
+                                <span className="label-text">Shipping Address</span>
+                            </label>
+                            <textarea
+                                className="textarea textarea-bordered h-24"
+                                placeholder="Enter your full shipping address"
+                                value={shippingAddress}
+                                onChange={(e) => setShippingAddress(e.target.value)}
+                            ></textarea>
+                        </div>
+                        <div className="space-y-2">
+                            <p className="flex justify-between"><span>Product Price:</span> <span>${totalPrice.toFixed(2)}</span></p>
+                            <p className="flex justify-between"><span>Shipping Charge:</span> <span>${shippingCharge.toFixed(2)}</span></p>
+                            <hr />
+                            <p className="flex justify-between font-bold"><span>Total Charge:</span> <span>${totalCharge.toFixed(2)}</span></p>
+                        </div>
+                        <div className="modal-action">
+                            <button className="btn" onClick={() => dispatch(closePurchaseModal())}>Cancel</button>
+                            <button className="btn btn-primary" onClick={handleConfirmPurchase} disabled={isCreatingOrder || !shippingAddress.trim()}>
+                                {isCreatingOrder ? <span className="loading loading-spinner"></span> : 'Confirm'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Success Modal */}
+            {showSuccessModal && (
                 <div className="modal modal-open text-center">
                     <div className="modal-box flex flex-col justify-center items-center space-y-3">
                         <img src="/assets/Group.png" alt="" />
-                        <h3 className="font-bold text-lg">Successfully Paid!</h3>
-                        <p className="py-4">Your payment was successful, and your cart is now empty.</p>
+                        <h3 className="font-bold text-lg">Order Placed Successfully!</h3>
+                        <p className="py-4">Thank you for your purchase. Your order is being processed.</p>
                         <div className="modal-action">
                             <button className="btn btn-primary" onClick={() => {
-                                setModal(false)
-                                navigate('/')
+                                setShowSuccessModal(false)
+                                navigate('/order') // Navigate to order history page
                             }}>
                                 Close
                             </button>

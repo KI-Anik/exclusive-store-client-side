@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import { store } from './app/store';
 import { AllProductsPage, ProductDetailsPage } from './features/products';
 import HomePage from './components/Home/HomePage';
-import OrderPage from './features/orders/OrderPage';
+import { OrderPage, SingleOrderPage } from './features/orders';
 import DashBoardPage from './components/dashboard/DashBoardPage';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboardHome from './components/admin/pages/AdminDashboardHome';
@@ -23,6 +23,8 @@ import ManageOrders from './components/admin/pages/ManageOrders';
 import LoginPage from './components/auth/LoginPage';
 import PrivateRoute from './components/auth/PrivateRoute';
 import RegistrationPage from './components/auth/RegistrationPage';
+import PersistLogin from './components/auth/PersistLogin';
+import UserRoute from './components/auth/UserRoute';
 
 
 const router = createBrowserRouter([
@@ -33,62 +35,80 @@ const router = createBrowserRouter([
     errorElement: <Error></Error>,
     children: [
 
+      // Public routes
       {
         path: '/',
         element: <HomePage></HomePage>,
       },
       {
         path: '/details/:id',
-        element: <ProductDetailsPage />
+        element: <ProductDetailsPage />,
       },
       {
         path: '/allproducts',
         element: <AllProductsPage />,
-
-      },
-      {
-        path: '/dashboard',
-        element: <DashBoardPage></DashBoardPage>,
-      },
-      {
-        path: '/order',
-        element: <OrderPage />
       },
       {
         path: '/login',
-        element: <LoginPage />
+        element: <LoginPage />,
       },
       {
         path: '/register',
-        element: <RegistrationPage />
+        element: <RegistrationPage />,
       },
+
+      // Protected routes wrapped with PersistLogin
       {
-        path: '/admin',
-        element: (
-          <PrivateRoute>
-            <AdminLayout />
-          </PrivateRoute>
-        ),
+        element: <PersistLogin />,
         children: [
           {
-            index: true,
-            element: <AdminDashboardHome />
+            path: '/dashboard',
+            element: <DashBoardPage />,
           },
           {
-            path: 'manage-products',
-            element: <ManageProducts />
+            path: '/order',
+            element: (
+              <UserRoute>
+                <OrderPage />
+              </UserRoute>
+            ),
           },
           {
-            path: 'manage-users',
-            element: <ManageUsers />,
+            path: '/order/:id',
+            element: (
+              <UserRoute>
+                <SingleOrderPage />
+              </UserRoute>
+            ),
           },
           {
-            path: 'manage-orders',
-            element: <ManageOrders />,
-            loader: () => fetch('/orders.json')
-          }
-        ]
-      }
+            path: '/admin',
+            element: (
+              <PrivateRoute>
+                <AdminLayout />
+              </PrivateRoute>
+            ),
+            children: [
+              {
+                index: true,
+                element: <AdminDashboardHome />,
+              },
+              {
+                path: 'manage-products',
+                element: <ManageProducts />,
+              },
+              {
+                path: 'manage-users',
+                element: <ManageUsers />,
+              },
+              {
+                path: 'manage-orders',
+                element: <ManageOrders />,
+              },
+            ],
+          },
+        ],
+      },
     ]
   },
 ]);

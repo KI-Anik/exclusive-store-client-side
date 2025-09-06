@@ -23,7 +23,7 @@ const CardList = ({ item, handleRemove, moveToCart }) => {
             <div className="p-5 grid grid-cols-4 items-center justify-items-center">
                 <img
                     src={product_image}
-                    className="rounded-2xl shadow-2xl " />
+                    className="rounded-2xl w-1/3" />
 
                 <div className='space-y-2'>
                     <h1 className="text-xl font-bold">{product_title}</h1>

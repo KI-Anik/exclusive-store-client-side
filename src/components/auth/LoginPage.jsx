@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { setUser } from '../../features/auth/authSlice';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../features/auth/api/authApi';
 import toast from 'react-hot-toast';
 
 const LoginPage = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const [login, { isLoading }] = useLoginMutation();
 
     const [email, setEmail] = useState('');
@@ -20,16 +18,19 @@ const LoginPage = () => {
             return;
         }
         try {
-            const response = await login({ email, password }).unwrap();
-            // Assuming the backend returns { data: { user, accessToken } }
-            const { user, accessToken } = response.data;
-            dispatch(setUser({ ...user, token: accessToken }));
+            // The `login` mutation now automatically handles setting the user state
+            // via the `onQueryStarted` lifecycle callback in `authApiSlice.js`.
+            const { data } = await login({ email, password }).unwrap();
+            const { user } = data;
             toast.success('Logged in successfully!');
-            
-            if (user.role === 'Admin' || user.role === 'SUPER_ADMIN') {
+
+            const from = location.state?.from?.pathname || '/';
+
+            if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') {
                 navigate('/admin');
             } else {
-                navigate('/dashboard');
+                // Redirect back to the intended page, or to the dashboard as a fallback
+                navigate(from, { replace: true });
             }
         } catch (err) {
             toast.error(err?.data?.message || 'Failed to login. Please check your credentials.');

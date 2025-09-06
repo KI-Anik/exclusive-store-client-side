@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGetCategoriesQuery } from '../api/productApi';
 
-const FilterByCategories = ({handleCategory}) => {
+const FilterByCategories = ({ handleCategory, activeCategory }) => {
 
     const {data : categories = []} = useGetCategoriesQuery()
     console.log(categories);
@@ -11,7 +11,7 @@ const FilterByCategories = ({handleCategory}) => {
                         {
                             categories.map(item =>
                                 <button key={item.id}
-                                    className='btn hover:bg-purple-500'
+                                    className={`btn hover:bg-purple-500 ${activeCategory === item.category ? 'btn-active btn-secondary' : ''}`}
                                     onClick={() => handleCategory(item.category)}
                                 >
                                     {item.category}

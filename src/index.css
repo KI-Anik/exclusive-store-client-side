@@ -19,3 +19,8 @@ aside > ul > a {
   text-decoration: underline;
   color: rgb(53, 196, 196);
 }
+
+/* Fix for swiper container width issue */
+.swiper-container {
+  width: 100%;
+}

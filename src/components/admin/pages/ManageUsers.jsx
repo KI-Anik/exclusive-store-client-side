@@ -4,7 +4,7 @@ import {
     useGetUsersQuery,
     useDeleteUserMutation,
     useUpdateUserMutation,
-    useAddUserMutation,
+    useRegisterUserMutation,
 } from '../../../features/users/api/userApi';
 import { setEditingUser, clearEditingUser, setDeletingUser, clearDeletingUser } from '../../../features/users/userSlice';
 import EditUserModal from './EditUserModal';
@@ -12,14 +12,15 @@ import ConfirmationModal from '../../ui/ConfirmationModal';
 import toast from 'react-hot-toast';
 
 const ManageUsers = () => {
+    const [page, setPage] = React.useState(1);
     const dispatch = useDispatch();
-    const { data: usersResponse, isLoading, isError, error } = useGetUsersQuery();
+    const { data, isLoading, isError, error } = useGetUsersQuery({ page, limit: 5 });
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
     const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
-    const [addUser, { isLoading: isAdding }] = useAddUserMutation();
+    const [registerUser, { isLoading: isAdding }] = useRegisterUserMutation();
 
     const { editingUserId, deletingUserId } = useSelector((state) => state.users);
-    const users = usersResponse?.data || [];
+    const { users = [], totalPages = 1 } = data || {};
     const editingUser = editingUserId && editingUserId !== 'new' ? users.find(u => u.id === editingUserId) : null;
     const isEditModalOpen = !!editingUserId;
     const isDeleteModalOpen = !!deletingUserId;
@@ -57,12 +58,21 @@ const ManageUsers = () => {
 
     const handleSaveNew = async (newUser) => {
         try {
-            await addUser(newUser).unwrap();
+            // The registerUser mutation is used here as it's the defined endpoint for user creation.
+            await registerUser(newUser).unwrap();
             toast.success('User created successfully');
             dispatch(clearEditingUser());
         } catch (err) {
             toast.error(err?.data?.message || 'Failed to create user');
         }
+    };
+
+    const handlePreviousPage = () => {
+        setPage((prev) => Math.max(prev - 1, 1));
+    };
+
+    const handleNextPage = () => {
+        setPage((prev) => Math.min(prev + 1, totalPages));
     };
 
     return (
@@ -95,7 +105,7 @@ const ManageUsers = () => {
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td><span className={`badge ${user.role === 'Admin' ? 'badge-secondary' : 'badge-ghost'}`}>{user.role}</span></td>
-                                <td>{user.joined_date}</td>
+                                <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                                 <td className='space-x-2'>
                                     <button onClick={() => handleEdit(user)} className="btn btn-sm btn-info" disabled={isDeleting}>Edit</button>
                                     <button onClick={() => handleDeleteClick(user.id)} className="btn btn-sm btn-error" disabled={isDeleting}>
@@ -106,6 +116,27 @@ const ManageUsers = () => {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center items-center space-x-4 mt-8">
+                <button
+                    onClick={handlePreviousPage}
+                    disabled={page === 1 || isLoading}
+                    className="btn"
+                >
+                    « Previous
+                </button>
+                <span className="font-semibold">
+                    Page {page} of {totalPages}
+                </span>
+                <button
+                    onClick={handleNextPage}
+                    disabled={page === totalPages || isLoading}
+                    className="btn"
+                >
+                    Next »
+                </button>
             </div>
             {isEditModalOpen && (
                 <EditUserModal

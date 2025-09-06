@@ -1,59 +1,42 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQueryWithReauth } from '../../auth/api/baseQueryWithReauth';
+import { apiSlice } from '../../../app/apiSlice';
 
 const categoriesData = [
-  {
-    "id": 0,
-    "category": "All Product"
-  },
-  {
-    "id": 1,
-    "category": "Samsung"
-  },
-  {
-    "id": 2,
-    "category": "Iphone"
-  },
-  {
-    "id": 3,
-    "category": "Oppo"
-  },
-  {
-    "id": 4,
-    "category": "I-pad"
-  },
-  {
-    "id": 5,
-    "category": "Smart Watch"
-  }
+  { id: 0, category: 'All Product' },
+  { id: 1, category: 'Samsung' },
+  { id: 2, category: 'Iphone' },
+  { id: 3, category: 'Oppo' },
+  { id: 4, category: 'I-pad' },
+  { id: 5, category: 'Smart Watch' },
 ];
 
-export const productApi = createApi({
-  reducerPath: 'productApi',
-  baseQuery: baseQueryWithReauth,
-  tagTypes: ['Products', 'Categories'],
+export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query({
-      // The query now accepts an object with page and limit
-      query: ({ page = 1, limit = 10 } = {}) => `products?page=${page}&limit=${limit}`,
-      // The result is now expected to be an object like { products: [], totalPages: 5 }
+      query: (params) => ({
+        url: 'products',
+        params,
+      }),
+      transformResponse: (response, meta, arg) => {
+        return {
+          products: response.data.map((product) => ({ ...product, id: product._id })),
+          totalPages: Math.ceil(response.meta.total / (arg.limit || 10)),
+        };
+      },
       providesTags: (result) => {
-        const products = result?.products || [];
+        const products = result?.products ?? [];
         return products.length
-          ? [
-              ...products.map(({ id }) => ({ type: 'Products', id })),
-              { type: 'Products', id: 'LIST' },
-            ]
-          : [{ type: 'Products', id: 'LIST' }];
+          ? [...products.map(({ id }) => ({ type: 'Product', id })), { type: 'Product', id: 'LIST' }]
+          : [{ type: 'Product', id: 'LIST' }];
       },
     }),
     getProduct: builder.query({
       query: (id) => `products/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Products', id }],
+      transformResponse: (response) => ({ ...response.data, id: response.data._id }),
+      providesTags: (result, error, id) => [{ type: 'Product', id: result?.id || id }],
     }),
     getCategories: builder.query({
       queryFn: () => ({ data: categoriesData }),
-      providesTags: ['Categories'],
+      providesTags: ['Category'],
     }),
     updateProduct: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -61,7 +44,20 @@ export const productApi = createApi({
         method: 'PATCH',
         body: patch,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Products', id }],
+      transformResponse: (response) => ({ ...response.data, id: response.data._id }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Product', id }, { type: 'Product', id: 'LIST' }],
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          productApiSlice.util.updateQueryData('getProduct', id, (draft) => {
+            Object.assign(draft, patch);
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     addProduct: builder.mutation({
       query: (newProduct) => ({
@@ -69,14 +65,38 @@ export const productApi = createApi({
         method: 'POST',
         body: newProduct,
       }),
-      invalidatesTags: [{ type: 'Products', id: 'LIST' }],
+      transformResponse: (response) => ({ ...response.data, id: response.data._id }),
+      invalidatesTags: [{ type: 'Product', id: 'LIST' }],
     }),
     deleteProduct: builder.mutation({
       query: (id) => ({
         url: `products/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [{ type: 'Products', id: 'LIST' }],
+      transformResponse: (response) => ({ ...response.data, id: response.data._id }),
+      async onQueryStarted(id, { dispatch, queryFulfilled, getState }) {
+        const patchResults = [];
+        for (const { endpointName, originalArgs } of productApiSlice.util.selectCachedSubscribers(getState())) {
+          if (endpointName === 'getProducts') {
+            patchResults.push(
+              dispatch(
+                productApiSlice.util.updateQueryData(endpointName, originalArgs, (draft) => {
+                  const productIndex = draft.products.findIndex((p) => p.id === id);
+                  if (productIndex > -1) {
+                    draft.products.splice(productIndex, 1);
+                  }
+                }),
+              ),
+            );
+          }
+        }
+
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResults.forEach((patchResult) => patchResult.undo());
+        }
+      },
     }),
   }),
 });
@@ -88,4 +108,4 @@ export const {
   useUpdateProductMutation,
   useAddProductMutation,
   useDeleteProductMutation,
-} = productApi;
+} = productApiSlice;

@@ -6,7 +6,7 @@ const PrivateRoute = ({ children }) => {
     const user = useSelector(state => state.auth.user);
     const location = useLocation();
 
-    if (user && user.role === 'ADMIN' || user.role==='SUPER_ADMIN') {
+    if (user && (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')) {
         return children;
     }
 

@@ -26,7 +26,7 @@ const RegistrationPage = () => {
                 formData.append('name', name);
                 formData.append('email', email);
                 formData.append('password', password);
-                formData.append('picture', photoFile);
+                formData.append('photoURL', photoFile);
 
                 // You cannot log FormData directly. To see its contents, you must iterate over it.
                 console.log('--- FormData Contents ---');
@@ -40,13 +40,13 @@ const RegistrationPage = () => {
                 // Construct payload and only include photoURL if it's not empty
                 const payload = { name, email, password };
                 if (photoURL) {
-                    payload.picture = photoURL;
+                    payload.photoURL = photoURL;
                 }
                 await registerUser(payload).unwrap();
             }
 
-            toast.success('Registration successful! Please log in.');
-            navigate('/login');
+            toast.success('Registration successful! You are now logged in.');
+            navigate('/dashboard'); // Navigate to the dashboard since the user is now logged in
         } catch (err) {
             toast.error(err?.data?.message || 'Registration failed. Please try again.');
         }
