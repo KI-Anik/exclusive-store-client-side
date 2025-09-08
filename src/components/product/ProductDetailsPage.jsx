@@ -2,7 +2,8 @@ import { Link, useLoaderData, useParams } from 'react-router-dom';
 import { FaRegHeart } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, addToWishlist } from './productSlice';
+import { addToCart, addToWishlist } from '../../features/slice/productSlice';
+import RelatedProducts from './RelatedProducts';
 
 
 const ProductDetailsPage
@@ -10,9 +11,10 @@ const ProductDetailsPage
         const { id } = useParams()
         const pId = parseInt(id)
         const data = useLoaderData()
+        console.log(data);
 
         const singleProductCard = data.find(ProductCard => ProductCard.id === pId)
-        const { id: currentBookId, product_image, product_title, price, description, specification, rating, availability } = singleProductCard
+        const { id: currentBookId, product_image, product_title, price, description, specification, rating, availability, category } = singleProductCard
 
         const dispatch = useDispatch()
 
@@ -26,6 +28,8 @@ const ProductDetailsPage
         const handleAddToWishList = () => {
             dispatch(addToWishlist(singleProductCard))
         }
+
+        const categoryFilter = data.filter(item => item.category === category)
 
         return (
             <div>
@@ -92,6 +96,7 @@ const ProductDetailsPage
                         </div>
                     </div>
                 </div>
+                <RelatedProducts categoryFilter={categoryFilter}></RelatedProducts>
             </div>
         );
     };

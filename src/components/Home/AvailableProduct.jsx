@@ -1,17 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import { useGetCategoriesQuery, useGetProductsQuery } from '../../features/products';
-import FilterByCategories from '../../features/products/components/FilterByCategories';
-import ProductCard from '../../features/products/components/ProductCard';
+import FilterByCategories from './FilterByCategories';
+import ProductCard from '../product/ProductCard';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useGetProductsQuery } from '../../features/api/productApi';
 
 const AvailableProduct = () => {
-    const { data: categories = [] } = useGetCategoriesQuery()
     const { data: allProducts = [] } = useGetProductsQuery()
 
     const [category, setCategory] = useState("All Product") // only for display side categories name
 
     const gadget = useMemo(() => {
         if (category === 'All Product') {
-            return allProducts
+            return allProducts.slice(0, 9)
         }
         return allProducts.filter(item => item.category === category)
     }, [allProducts, category])
@@ -19,6 +19,7 @@ const AvailableProduct = () => {
     const handleCategory = (name) => {
         setCategory(name)
     }
+
 
     return (
         <div>
@@ -43,6 +44,13 @@ const AvailableProduct = () => {
                     }
                 </main>
 
+
+            </div>
+            {/* View All Button */}
+            <div className="text-end pb-10">
+                <Link to="/allproducts" className="btn btn-accent">
+                    View All Products
+                </Link>
             </div>
         </div>
     );
