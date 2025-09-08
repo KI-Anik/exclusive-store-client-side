@@ -1,21 +1,23 @@
 import './index.css'
-import { StrictMode, useState } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import './index.css'
-import Root from './components/Root/Root';
+import Root from './components/layout/Root';
 import Error from './components/ui/Error';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
-import { ProductDetails } from './features/products';
-import HomePage from './components/Home/HomePage';
-import AllProductsPage from './features/products/AllProductsPage';
-import OrderPage from './features/orders/OrderPage';
-import DashBoardPage from './features/dashboard/DashBoardPage';
+import HomePage from './components/pages/HomePage';
+import AllProductsPage from './components/pages/AllProductsPage';
+import MyOrderPage from './components/pages/MyOrderPage';
+import DashBoardPage from './components/pages/DashBoardPage';
+import LoginPage from './components/pages/LoginPage';
+import RegisterPage from './components/pages/RegisterPage';
+import ProductDetailsPage from './components/product/ProductDetailsPage';
 
 
 const router = createBrowserRouter([
@@ -33,22 +35,28 @@ const router = createBrowserRouter([
       {
         path: '/details/:id',
         loader: () => fetch(`/fakeData.json`),
-        element: <ProductDetails/>
+        element: <ProductDetailsPage/>
       },
       {
         path: '/allproducts',
-        loader: ()=> fetch('/categories.json'),
         element: <AllProductsPage/>,
 
       },
       {
         path: '/dashboard',
-        loader: () => fetch('/fakeData.json'),
         element: <DashBoardPage></DashBoardPage>,
       },
       {
         path: '/order',
-        element: <OrderPage/>
+        element: <MyOrderPage/>
+      },
+      {
+        path: '/auth/login',
+        element: <LoginPage/>
+      },
+      {
+        path: '/auth/register',
+        element: <RegisterPage></RegisterPage>
       }
     ]
   },

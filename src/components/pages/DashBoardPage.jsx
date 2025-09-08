@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import CardList from './CardList';
+import CardList from '../dashboard/CartTable';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../products/productSlice';
+import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../../features/slice/productSlice';
 
 const DashBoardPage = () => {
     const navigate = useNavigate()
@@ -58,7 +58,7 @@ const DashBoardPage = () => {
                         <button onClick={handlePurchase} className='btn hover:bg-green-500 border border-emerald-400'>Purchase</button>
                     </>)
                 }
-                {/* appears only when dashboard has value more than 1 */}
+                {/* visiable only when dashboard has more than 1 product */}
                 {
                     (carts?.length > 1 || wishLists?.length > 1) &&
                     <button onClick={handleSortByPrice} className='btn hover:bg-lime-400 border-emerald-400'>Sort By price</button>

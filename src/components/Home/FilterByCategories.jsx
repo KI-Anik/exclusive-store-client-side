@@ -1,9 +1,10 @@
 import React from 'react';
-import { useGetCategoriesQuery } from '../api/productApi';
+import { useGetCategoriesQuery } from '../../features/api/productApi';
 
 const FilterByCategories = ({handleCategory}) => {
 
     const {data : categories = []} = useGetCategoriesQuery()
+    
     return (
         <div className='card bg-base-100 items-center shadow-xl py-8 gap-5 flex flex-col'>
                         {/* map for display side category name as btn, addEvent for filter */}

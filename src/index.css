@@ -8,14 +8,3 @@ body {
   font-family: "Sora", sans-serif;
 }
 
-aside > ul > a {
-  padding: 10px;
-  margin: 10px;
-  background-color: seashell;
-  border-radius: 10px;
-}
-
-.active {
-  text-decoration: underline;
-  color: rgb(53, 196, 196);
-}

@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import productReducer from '../features/products/productSlice';
-import { productApi } from '../features/products/api/productApi';
+import productReducer from '../features/slice/productSlice';
+import { productApi } from '../features/api/productApi';
 
 export const store = configureStore({
     reducer: {
