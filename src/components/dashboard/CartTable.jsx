@@ -1,6 +1,6 @@
 import { FaRegHeart, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { updateQuantity } from '../../features/slice/productSlice';
+import { updateQuantity } from '../../app/slice/productSlice';
 
 const CardList = ({ item, handleRemove, moveToCart }) => {
 
@@ -40,7 +40,7 @@ const CardList = ({ item, handleRemove, moveToCart }) => {
                 </div>
                 {/* delete button */}
                 <button onClick={handleRemove} className='mx-auto'><FaTrashAlt></FaTrashAlt></button>
-                
+
                 {/* updateQuantity button available only for 'cart' tab */}
                 {availability ?
                     (moveToCart ? (

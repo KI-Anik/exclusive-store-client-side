@@ -4,7 +4,7 @@ import 'react-tabs/style/react-tabs.css';
 import CardList from '../dashboard/CartTable';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../../features/slice/productSlice';
+import { clearCart, moveToCartFromWishList, removeFromCart, removeFromWishlist, sortByPrice } from '../../app/slice/productSlice';
 
 const DashBoardPage = () => {
     const navigate = useNavigate()
