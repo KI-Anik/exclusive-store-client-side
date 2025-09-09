@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductCard from '../product/ProductCard';
-import { useGetProductsQuery } from '../../features/api/productApi';
+import { useGetProductsQuery } from '../../app/api/productApi';
 
 const AllProductsPage = () => {
        const { data: allProducts = []} = useGetProductsQuery()

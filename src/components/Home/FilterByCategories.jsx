@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetCategoriesQuery } from '../../features/api/productApi';
+import { useGetCategoriesQuery } from '../../app/api/productApi';
 
 const FilterByCategories = ({handleCategory}) => {
 
@@ -9,7 +9,7 @@ const FilterByCategories = ({handleCategory}) => {
         <div className='card bg-base-100 items-center shadow-xl py-8 gap-5 flex flex-col'>
                         {/* map for display side category name as btn, addEvent for filter */}
                         {
-                            categories.map(item =>
+                            categories?.map(item =>
                                 <button key={item.id}
                                     className='btn hover:bg-purple-500'
                                     onClick={() => handleCategory(item.category)}

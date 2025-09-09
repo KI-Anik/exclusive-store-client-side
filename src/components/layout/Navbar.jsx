@@ -1,8 +1,16 @@
-import React from 'react';
+import { useContext } from "react";
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import { AuthContext } from "../../provider/AuthProvider";
+import Loading from "../ui/Loading"
+import { Tooltip } from "react-tooltip";
 
 const Navbar = () => {
     const { pathname } = useLocation()
+     const { user, logOut, loading } = useContext(AuthContext)
+
+    if (loading) {
+        return <Loading></Loading>
+    }
 
     const links = (
         <div className='flex flex-col lg:flex-row text-lg font-semibold m-2'>
@@ -36,10 +44,22 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end gap-4 items-center text-black">
-                    <>
-                    <button><Link to={'/auth/login'} className="btn">Log in</Link></button>
-                    <button><Link to={'/auth/register'} className="btn">Register</Link></button>
-                    </>
+                      {
+                    user && user?.email ?
+                        <>
+                            <p className="photoId cursor-pointer w-10">
+                                <Tooltip anchorSelect=".photoId" place="left" className="z-10">
+                                    {user?.displayName}
+                                </Tooltip>
+                                <img src={user?.photoURL} alt="profile photo" className="rounded-full" />
+                            </p>
+                            <button onClick={logOut} className="btn">Log Out</button>
+                        </>
+                        : <>
+                            <button><Link to={'/auth/login'} className="btn">Log in</Link></button>
+                            <button><Link to={'/auth/register'} className="btn">Register</Link></button>
+                        </>
+                }
             </div>
         </div>
     );

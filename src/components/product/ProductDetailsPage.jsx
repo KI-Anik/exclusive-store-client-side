@@ -2,7 +2,7 @@ import { Link, useLoaderData, useParams } from 'react-router-dom';
 import { FaRegHeart } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, addToWishlist } from '../../features/slice/productSlice';
+import { addToCart, addToWishlist } from '../../app/slice/productSlice';
 import RelatedProducts from './RelatedProducts';
 
 

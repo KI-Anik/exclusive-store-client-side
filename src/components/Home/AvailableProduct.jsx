@@ -2,16 +2,16 @@ import React, { useMemo, useState } from 'react';
 import FilterByCategories from './FilterByCategories';
 import ProductCard from '../product/ProductCard';
 import { Link, useSearchParams } from 'react-router-dom';
-import { useGetProductsQuery } from '../../features/api/productApi';
+import { useGetProductsQuery } from '../../app/api/productApi';
 
 const AvailableProduct = () => {
-    const { data: allProducts = [] } = useGetProductsQuery()
+    const { data: allProducts = [], isLoading } = useGetProductsQuery()
 
     const [category, setCategory] = useState("All Product") // only for display side categories name
 
     const gadget = useMemo(() => {
         if (category === 'All Product') {
-            return allProducts.slice(0, 9)
+            return allProducts?.slice(0, 9)
         }
         return allProducts.filter(item => item.category === category)
     }, [allProducts, category])

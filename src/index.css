@@ -8,3 +8,8 @@ body {
   font-family: "Sora", sans-serif;
 }
 
+.active {
+  text-decoration: underline;
+  color: rgb(53, 196, 196);
+  font-size: x-large;
+}
