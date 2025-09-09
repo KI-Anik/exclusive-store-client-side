@@ -1,56 +1,76 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate,  } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
-import { useRegisterMutation } from "../../app/api/userApi";
+import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
 
 const RegisterPage = () => {
-    const navigate = useNavigate();
-    const [register, { data, isLoading, isSuccess, isError, error }] = useRegisterMutation();
+    const { createNewUser, loginWithGoogle, setUser, updateUserProfile } = useContext(AuthContext)
+    const navigate = useNavigate()
 
-    const handleRegister = async e => {
-        e.preventDefault();
+    const handleRegister = e => {
+        e.preventDefault()
         const form = e.target;
         const name = form.name.value;
         const photo = form.photo.value;
-        const email = form.email.value;
-        const password = form.password.value;
+        const email = form.email.value
+        const password = form.password.value
 
-        const userInfo = { name, email, password };
-        if (photo) {
-            userInfo.photo = photo;
-        }
+        // conditionally, password checking
+        // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/
+        // if (!passwordRegex.test(password)) {
+        //   toast.error('password should be at least one uppercase, one lowercase and 6 character long')
+        //   return
+        // }
 
-        await register(userInfo);
-    };
+        // authentication start
+        createNewUser(email, password)
+            .then(() => {
+                // profile start
+                updateUserProfile({displayName: name, photoURL: photo })
+                    .then(() => {
+                        navigate(location?.state ? location.state : '/')
+                        toast.success('Account created successfully')
+                    })
+                    .catch(err => {
+                        toast.error(err.code)
+                    })
+                    // profile end
+            })
 
-    useEffect(() => {
-        if (isSuccess && data) {
-            toast.success("Registered and logged in successfully!");
-            navigate("/");
-        }
-        if (isError) {
-            toast.error(error?.data?.message || "Registration failed. Please try again.");
-        }
-    }, [isSuccess, isError, data, error, navigate]);
+            .catch(err => {
+                toast.error( err.code)
+            })
+        // authentication end
+    }
 
+    const handleGoogle = () => {
+        loginWithGoogle()
+            .then(result => {
+                setUser(result.user)
+                navigate(location?.state ? location.state : '/')
+            })
+            .catch(err => {
+                toast.error(err.code)
+            })
+    }
+    // authentication end
 
     return (
-        <div className="hero min-h-screen bg-base-200">
+        <div className="hero">
             <div className="hero-content flex-col lg:flex-row-reverse">
-                <div className="text-center lg:text-left px-8">
+                <div className="text-center lg:text-left">
                     <h1 className="text-5xl font-bold">Registration!</h1>
                     <p className="py-6">
                         Create an account to start your journey with Exclusive Store. Get access to exclusive deals, track your orders,
                         and manage your wishlist.
                     </p>
-
                 </div>
                 <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl card-body">
-                    <button className="btn "> <FaGoogle></FaGoogle> Continue with Google</button>
-                    <div className="text-xl font-bold text-center">
-                        Or
-                    </div>
+                        <button onClick={handleGoogle} className="btn "> <FaGoogle></FaGoogle> Contionue with Google</button>
+                        <div className="text-xl font-bold text-center">
+                            Or
+                        </div>
                     <form onSubmit={handleRegister}>
                         <div className="form-control">
                             <label className="label">
@@ -62,7 +82,7 @@ const RegisterPage = () => {
                             <label className="label">
                                 <span className="label-text">Photo-URL</span>
                             </label>
-                            <input name="photo" type="url" placeholder="Provide your profile photo link" className="input input-bordered" />
+                            <input name="photo" type="url" placeholder="Provide your profile photo link" className="input input-bordered" required />
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -77,12 +97,10 @@ const RegisterPage = () => {
                             <input name="password" type="password" placeholder="password" className="input input-bordered" required />
                         </div>
                         <div className="form-control mt-6">
-                            <button type="submit" className="btn btn-primary" disabled={isLoading}>
-                                {isLoading ? 'Registering...' : 'Register'}
-                            </button>
+                            <button className="btn btn-primary">Register</button>
                         </div>
                     </form>
-                    <p className="text-center pt-4 font-semibold">
+                    <p className="text-center pb-5 font-semibold">
                         Already have an account? <Link to={'/auth/login'} className="text-blue-600 underline">Login</Link>
                     </p>
                 </div>

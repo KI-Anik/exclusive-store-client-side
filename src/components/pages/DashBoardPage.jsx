@@ -20,7 +20,7 @@ const DashBoardPage = () => {
 
     const totalPrice = carts.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
 
-    // remove item 
+    // Delete item 
     const handleRemove = (id, type) => {
         if (type === 'cart') {
             dispatch(removeFromCart(id))
